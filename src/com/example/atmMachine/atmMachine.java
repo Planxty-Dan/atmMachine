@@ -9,12 +9,11 @@ public class atmMachine {
     public static Scanner myScan = new Scanner(System.in);
     public static boolean okAnswer = true;
     public static int userChoice = 0;
+    public static double Balance = 500;
 
     public static void main(String[] args) {
         Scanner myScan = new Scanner(System.in);
         boolean menuLoop = true;
-        double accountBalance = 500;
-        int userChoice = 0;
 
         System.out.println("Welcome to Super Bank Of Bankiness\n" +
                 "Where your money is what we want, not in a bad way.\n" +
@@ -23,21 +22,19 @@ public class atmMachine {
         while (menuLoop == true) {
             userChoice = mainMenuChoiceLoop();
             if (userChoice == 1)
-                balanceCheck(accountBalance);
+                balanceCheck(Balance);
             if (userChoice == 2)
-                withdrawFunds(accountBalance);
+                withdrawFunds(Balance);
             if (userChoice == 3)
-                depositFunds(accountBalance);
-            else
+                depositFunds(Balance);
+            if (userChoice == 4) {
                 System.out.println("Come back soon...or we'll keep your money.");
                 menuLoop = false;
+            }
         }
     }
     public static int mainMenuChoiceLoop() {
-        boolean okAnswer = true;
-
-        while (okAnswer) {
-            System.out.println("How can we help you today?\n" +
+        System.out.println("How can we help you today?\n" +
                     "\n" +
                     "1: Check account balance\n" +
                     "2: Withdrawn that sweet, sweet money\n" +
@@ -46,33 +43,34 @@ public class atmMachine {
 
             userChoice = menuInput();
             rangeCheck(userChoice, 1, 4);
-        } return userChoice;
+        return userChoice;
     }
     public static int menuInput() {
+        int Choice = 0;
         if (myScan.hasNextInt()) {
-            okAnswer = false;
-            userChoice = myScan.nextInt();
-        }
-        else
+            Choice = myScan.nextInt();
+        } else {
             System.out.println("Please enter a 1-4.");
             myScan.nextLine();
-            mainMenuChoiceLoop();
-        return userChoice;
+            menuInput();
+        } return Choice;
     }
     public static void rangeCheck(int userChoice, int x, int y) {
         boolean choiceLoop = true;
         while (choiceLoop) {
             if ((userChoice >= x) && (userChoice <= y))
                 choiceLoop = false;
-            else
+            else {
+                System.out.println("Please enter a 1-4.");
                 menuInput();
+            }
         }
     }
     public static void balanceCheck(double accountBalance) {
         System.out.println("\nWe have $" + accountBalance + " of your money.\n" +
                 "We're keeping great care of it, we promise.\n");
     }
-    public static double withdrawFunds(double accountBalance) {
+    public static void withdrawFunds(double accountBalance) {
         double accountWithdrawal = 0;
         while (okAnswer == true) {
             System.out.println("\nYou can withdraw money but you had better give it back!\n" +
@@ -81,14 +79,17 @@ public class atmMachine {
             if (myScan.hasNextDouble()) {
                 okAnswer = false;
                 accountWithdrawal = myScan.nextDouble();
+
             } else
                 myScan.nextLine();
         }
         Double newBalance = accountBalance - accountWithdrawal;
+        Balance = newBalance;
         System.out.println("Your new balance is: " + newBalance);
-        return newBalance;
+        myScan.nextLine();
+        okAnswer = true;
     }
-    public static double depositFunds (double accountBalance) {
+    public static void depositFunds (double accountBalance) {
         double accountDeposit = 0;
         while (okAnswer == true) {
             System.out.println("You want to give us your money?  Thanks!\n" +
@@ -100,8 +101,9 @@ public class atmMachine {
             } else
                 myScan.nextLine();
         }
-        Double newBalance = accountBalance - accountDeposit;
+        Double newBalance = accountBalance + accountDeposit;
+        Balance = newBalance;
         System.out.println("Your new balance is: " + newBalance);
-        return newBalance;
+        myScan.nextLine();
     }
 }
